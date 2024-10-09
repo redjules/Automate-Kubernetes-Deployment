@@ -8,11 +8,9 @@
         api_version: v1
         kind: Namespace
         state: present
-        kubeconfig: /Users/anapedra/Downloads/terraform-learn-feature-eks/kubeconfig_myapp-eks-cluster
     - name: Deploy nginx my-app
       kubernetes.core.k8s:
         src: ~/demo-projects/K8s-Files/nginx-config.yaml
         state: present
-        kubeconfig:  /Users/anapedra/Downloads/terraform-learn-feature-eks/kubeconfig_myapp-eks-cluster
         namespace: my-app
 
