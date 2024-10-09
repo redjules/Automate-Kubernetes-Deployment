@@ -12,7 +12,7 @@ This project has 2 parts:
 
 # Create EKS cluster with Terraform
   
-we do terraform init and terraform apply of our terraform project for EKS (attached):
+we do terraform init, terraform plan and terraform apply of our terraform project for EKS (attached):
 
 
 <img width="513" alt="Screenshot 2024-10-09 at 21 05 56" src="https://github.com/user-attachments/assets/82f19a96-ea2c-46ff-aad0-c6a18b81d019">
@@ -54,7 +54,8 @@ We need to fulfill these requirements first:
 
 copy the path of the kubeconfig:
 
-<img width="560" alt="Screenshot 2024-10-09 at 21 12 24" src="https://github.com/user-attachments/assets/71cb203a-ba24-4c96-aa3c-117ad7773b02">
+<img width="805" alt="Screenshot 2024-10-09 at 22 16 12" src="https://github.com/user-attachments/assets/b6575388-8587-4613-a038-30cb5b188fd4">
+
 
 We change the inventory to hosts in our ansible.cfg:
 
@@ -68,27 +69,27 @@ We save it and execute our ansible playbook:
 
 We check it:
 
-<img width="581" alt="Screenshot 2024-10-09 at 21 14 19" src="https://github.com/user-attachments/assets/c4197cce-3b12-4a33-bd87-c0bce8bd2129">
+<img width="548" alt="Screenshot 2024-10-09 at 22 12 42" src="https://github.com/user-attachments/assets/273f7304-cafb-4aa1-971d-38f5e2e6feca">
 
+<img width="265" alt="Screenshot 2024-10-09 at 22 13 59" src="https://github.com/user-attachments/assets/59092c3d-cb1d-49aa-81bc-98cf82a58b35">
 
 
 Deploy app in the new namespace:
 
+Deployment:
+
 <img width="556" alt="Screenshot 2024-10-09 at 21 14 44" src="https://github.com/user-attachments/assets/570de0d1-569e-4272-935f-432c135afc5b">
 
+Service:
 
 <img width="402" alt="Screenshot 2024-10-09 at 21 15 05" src="https://github.com/user-attachments/assets/40a72830-374b-47b7-97f8-e72ef53b4aac">
 
 We use src: 
 
-<img width="558" alt="Screenshot 2024-10-09 at 21 15 33" src="https://github.com/user-attachments/assets/2f607708-adff-48b2-918c-62f8a7c73369">
+<img width="808" alt="Screenshot 2024-10-09 at 22 15 33" src="https://github.com/user-attachments/assets/855b753b-8b87-41b5-b5c8-ac9e9ca93816">
 
 
-<img width="541" alt="Screenshot 2024-10-09 at 21 15 43" src="https://github.com/user-attachments/assets/c8a15ebd-eb8a-45a9-9373-7282daf71103">
-
-
-<img width="567" alt="Screenshot 2024-10-09 at 21 15 57" src="https://github.com/user-attachments/assets/9b66837a-3df0-4a40-8f8c-4ce9bede2dcc">
-
+<img width="384" alt="Screenshot 2024-10-09 at 22 46 17" src="https://github.com/user-attachments/assets/a506f1ec-c030-4d14-9e60-8eb97113e3ab">
 
 
 In our browser we can access our nginx app:
@@ -101,6 +102,8 @@ Set env variable for kubeconfig using K8S-AUTH_KUBECONFIG and delete the kubecon
 
 
 <img width="554" alt="Screenshot 2024-10-09 at 21 17 13" src="https://github.com/user-attachments/assets/b5d9266b-7d59-44f8-b054-deb86a273171">
+
+![Screenshot 2024-10-09 at 22 47 31](https://github.com/user-attachments/assets/a0e43550-97d2-42eb-8c46-de2d6d202459)
 
 And we execute ansible playbook and still connects to the cluster:
 
