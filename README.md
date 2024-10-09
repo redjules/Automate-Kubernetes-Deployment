@@ -2,62 +2,107 @@
 
 ![Screenshot 2024-02-29 at 10 47 14](https://github.com/redjules/Automate-Kubernetes-Deployment/assets/106017493/35fb3a8c-f105-492b-b4f9-85da0a200e66)
 
-we do terraform init and terraform apply:
+This project has 2 parts:
 
-![Screenshot 2024-02-29 at 14 30 08](https://github.com/redjules/Automate-Kubernetes-Deployment/assets/106017493/cf0d1ca5-4caa-465e-89fc-268e3baa1b43)
+- Create EKS cluster with Terraform
 
-
-we create a namespace in EKS Cluster:
-
-![Screenshot 2024-02-29 at 14 43 27](https://github.com/redjules/Automate-Kubernetes-Deployment/assets/106017493/ab19af2a-8ec3-41ff-ac5e-cfeafc14caa7)
+- Write Ansible Play to deploy application in a new K8s namespace
 
 
-we install the requirements:
 
-![Screenshot 2024-02-29 at 14 42 00](https://github.com/redjules/Automate-Kubernetes-Deployment/assets/106017493/accf2d60-edc5-43e8-847a-52effa08b994)
-
-
-![Screenshot 2024-02-29 at 14 41 48](https://github.com/redjules/Automate-Kubernetes-Deployment/assets/106017493/75a214a0-f638-4f58-9e49-9266eabc487e)
-
-we execute the playbook:
-
-![Screenshot 2024-02-29 at 14 42 42](https://github.com/redjules/Automate-Kubernetes-Deployment/assets/106017493/79aa8854-45fb-416b-92cd-65125ff7eb41)
+# Create EKS cluster with Terraform
+  
+we do terraform init and terraform apply of our terraform project for EKS (attached):
 
 
-![Screenshot 2024-02-29 at 14 42 52](https://github.com/redjules/Automate-Kubernetes-Deployment/assets/106017493/1ce01777-e474-4a8d-93ff-0324058b1c53)
+<img width="513" alt="Screenshot 2024-10-09 at 21 05 56" src="https://github.com/user-attachments/assets/82f19a96-ea2c-46ff-aad0-c6a18b81d019">
 
-we check that the namespace was created:
+to create our EKS cluster in AWS:
 
-![Screenshot 2024-02-29 at 14 45 13](https://github.com/redjules/Automate-Kubernetes-Deployment/assets/106017493/2c672952-49ce-4870-a439-c5f2c327fe01)
+![Screenshot 2024-10-09 at 21 08 06](https://github.com/user-attachments/assets/6f992645-79ca-4e50-8555-5ea4abe2efe8)
 
-We will deploy that app in the new namespace:
+It’s active and we have 3 nodes:
 
-![Screenshot 2024-02-29 at 14 48 10](https://github.com/redjules/Automate-Kubernetes-Deployment/assets/106017493/ad4c35bb-1fd9-4136-8c3d-e07133b624a1)
-
-we check the pod is running:
-
-![Screenshot 2024-02-29 at 14 48 28](https://github.com/redjules/Automate-Kubernetes-Deployment/assets/106017493/875979ed-4fb2-4eb3-a794-d5ac901055f9)
+![Screenshot 2024-10-09 at 21 08 56](https://github.com/user-attachments/assets/307a2c4c-5e16-43b9-9372-00bf8850658b)
 
 
-![Screenshot 2024-02-29 at 14 49 21](https://github.com/redjules/Automate-Kubernetes-Deployment/assets/106017493/a97db1a2-7e3b-4b8f-acf9-88fd8a7fec55)
-
-and finally we set the environment variable for kubeconfig:
-
-![Screenshot 2024-02-29 at 14 51 33](https://github.com/redjules/Automate-Kubernetes-Deployment/assets/106017493/65e2f1b2-6f16-423e-a3e7-df59da2a1346)
-
-![Screenshot 2024-02-29 at 14 52 12](https://github.com/redjules/Automate-Kubernetes-Deployment/assets/106017493/497aba0d-322a-404b-94b6-ed7b1ac53dbd)
-
-and we remove kubeconfig from the tasks:
-
-![Screenshot 2024-02-29 at 14 52 50](https://github.com/redjules/Automate-Kubernetes-Deployment/assets/106017493/229d463a-1828-425c-89eb-d3145fc6e3b2)
-
-![Screenshot 2024-02-29 at 14 53 43](https://github.com/redjules/Automate-Kubernetes-Deployment/assets/106017493/db81f12c-d92c-4ac5-9734-cf832907a785)
-
-if now we execute the ansible playbook it should be able to connect to the cluster:
-
-![Screenshot 2024-02-29 at 14 53 59](https://github.com/redjules/Automate-Kubernetes-Deployment/assets/106017493/33328e82-dc38-46a7-a79c-0cda47fad296)
-
-![Screenshot 2024-02-29 at 14 52 32](https://github.com/redjules/Automate-Kubernetes-Deployment/assets/106017493/198bfa89-9ed5-4467-b919-a537edacc2f6)
+With Ansible we want to connect to this cluster and deploy a very simple deployment and service components into that cluster
 
 
-and it does!
+We create a namespace in EKS Cluster:
+
+
+First, we need to update our kubeconfig file to be able to connect to our cluster. This kubeconfig file includes all the info needed to connect to our cluster like the server address, the hostname, certificates … and this info is what we’re going to be using to connect to our EKS cluster using Ansible. So first we will generate a kubeconfig file:
+
+
+<img width="582" alt="Screenshot 2024-10-09 at 21 10 00" src="https://github.com/user-attachments/assets/4658ce65-289c-43c0-91b8-528b7d7aa302">
+
+and here we have the kubeconfig file:
+
+
+<img width="581" alt="Screenshot 2024-10-09 at 21 10 53" src="https://github.com/user-attachments/assets/7dc8b191-92b7-412f-b22b-1562f22e31cd">
+
+
+Now we go to our ansible project and create a yaml called deploy-to-k8s.yaml where I will write a plan to deploy an app in a Kubernetes cluster (I will use kubernetes.core.k8s Ansibles module):![image]
+
+<img width="578" alt="Screenshot 2024-10-09 at 21 11 23" src="https://github.com/user-attachments/assets/dd1968ff-d2d1-473d-b948-2bc167a039a1">
+
+We configure Ansible to read the kubeconfig context info from the file to know what the address of the cluster is and use the certificates inside to authenticate with the cluster
+We need to fulfill these requirements first:
+
+<img width="558" alt="Screenshot 2024-10-09 at 21 11 49" src="https://github.com/user-attachments/assets/761cfc72-fd59-4537-ad6a-97312c8b26d6">
+
+copy the path of the kubeconfig:
+
+<img width="560" alt="Screenshot 2024-10-09 at 21 12 24" src="https://github.com/user-attachments/assets/71cb203a-ba24-4c96-aa3c-117ad7773b02">
+
+We change the inventory to hosts in our ansible.cfg:
+
+<img width="553" alt="Screenshot 2024-10-09 at 21 13 02" src="https://github.com/user-attachments/assets/bfd1adf9-8cf0-4fa3-a921-3b3961e9b04c">
+
+
+We save it and execute our ansible playbook:
+
+<img width="378" alt="Screenshot 2024-10-09 at 21 13 32" src="https://github.com/user-attachments/assets/56b96b8d-40ef-45f1-8571-8e7bcf1f5e4f">
+
+
+We check it:
+
+<img width="581" alt="Screenshot 2024-10-09 at 21 14 19" src="https://github.com/user-attachments/assets/c4197cce-3b12-4a33-bd87-c0bce8bd2129">
+
+
+
+Deploy app in the new namespace:
+
+<img width="556" alt="Screenshot 2024-10-09 at 21 14 44" src="https://github.com/user-attachments/assets/570de0d1-569e-4272-935f-432c135afc5b">
+
+
+<img width="402" alt="Screenshot 2024-10-09 at 21 15 05" src="https://github.com/user-attachments/assets/40a72830-374b-47b7-97f8-e72ef53b4aac">
+
+We use src: 
+
+<img width="558" alt="Screenshot 2024-10-09 at 21 15 33" src="https://github.com/user-attachments/assets/2f607708-adff-48b2-918c-62f8a7c73369">
+
+
+<img width="541" alt="Screenshot 2024-10-09 at 21 15 43" src="https://github.com/user-attachments/assets/c8a15ebd-eb8a-45a9-9373-7282daf71103">
+
+
+<img width="567" alt="Screenshot 2024-10-09 at 21 15 57" src="https://github.com/user-attachments/assets/9b66837a-3df0-4a40-8f8c-4ce9bede2dcc">
+
+
+
+In our browser we can access our nginx app:
+
+
+<img width="543" alt="Screenshot 2024-10-09 at 21 16 29" src="https://github.com/user-attachments/assets/40434a75-bb58-4cf2-9af0-91a98ad30a1b">
+
+Set env variable for kubeconfig using K8S-AUTH_KUBECONFIG and delete the kubeconfig entries from our code:
+<img width="561" alt="Screenshot 2024-10-09 at 21 17 00" src="https://github.com/user-attachments/assets/459f3827-724e-4c92-8785-8eba12cc765d">
+
+
+<img width="554" alt="Screenshot 2024-10-09 at 21 17 13" src="https://github.com/user-attachments/assets/b5d9266b-7d59-44f8-b054-deb86a273171">
+
+And we execute ansible playbook and still connects to the cluster:
+
+<img width="430" alt="Screenshot 2024-10-09 at 21 17 52" src="https://github.com/user-attachments/assets/aa5538bc-0c02-4b68-a043-7a0f19dbcb3c">
+
