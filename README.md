@@ -12,7 +12,7 @@ This project has 2 parts:
 
 # Create EKS cluster with Terraform
   
-we do terraform init, terraform plan and terraform apply of our terraform project for EKS (attached):
+We do terraform init, terraform plan and terraform apply of our terraform project for EKS (attached):
 
 
 <img width="513" alt="Screenshot 2024-10-09 at 21 05 56" src="https://github.com/user-attachments/assets/82f19a96-ea2c-46ff-aad0-c6a18b81d019">
